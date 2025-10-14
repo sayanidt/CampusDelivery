@@ -7,8 +7,18 @@ const pool = mysql.createPool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME || 'campus_delivery',
   waitForConnections: true,
-  connectionLimit: 10
+  connectionLimit: 10,
+  queueLimit: 0
+});
+
+// Test connection
+pool.getConnection((err, connection) => {
+  if (err) {
+    console.error('❌ Database connection failed:', err.message);
+  } else {
+    console.log('✅ Database connected successfully');
+    connection.release();
+  }
 });
 
 module.exports = pool.promise();
-
